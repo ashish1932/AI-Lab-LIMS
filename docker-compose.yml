@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+  senaite:
+    image: senaite/senaite:2.x
+    container_name: senaite_lims
+    ports:
+      - "8080:8080"
+    volumes:
+      - senaite-data:/data
+    environment:
+      - SITE_ID=senaite
+      - ADMIN_USER=admin
+      - ADMIN_PASSWORD=admin
+    restart: unless-stopped
+
+volumes:
+  senaite-data:
+    driver: local

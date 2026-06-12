@@ -1,0 +1,34 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="senaite.core">
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="senaite-dashboard"
+      class=".dashboard.DashboardView"
+      permission="zope.Public"
+      layer="senaite.core.interfaces.ISenaiteCore"
+      />
+
+  <browser:page
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      name="senaite-dashboard-data"
+      class=".dashboard.DashboardDataView"
+      permission="zope2.View"
+      layer="senaite.core.interfaces.ISenaiteCore"
+      />
+
+  <browser:resource
+      name="senaite.core.dashboard.css"
+      file="static/css/dashboard.css"
+      layer="senaite.core.interfaces.ISenaiteCore"
+      />
+
+  <browser:resource
+      name="senaite.core.dashboard.js"
+      file="static/js/dashboard.js"
+      layer="senaite.core.interfaces.ISenaiteCore"
+      />
+
+</configure>

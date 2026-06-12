@@ -1,0 +1,51 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="senaite.core">
+
+  <adapter name="BatchDate" factory=".batch.BatchDate" />
+
+  <!--
+    Use plone.folder's UnorderedOrdering as the IOrdering adapter for
+    Client objects.
+
+    The default DefaultOrdering keeps a `plone.folder.ordered.order`
+    PersistentList annotation that grows with the number of children:
+    every `_setObject` calls `notifyAdded` which appends to the list.
+    PersistentList has no `_p_resolveConflict()`, so two concurrent
+    appends collide and the conflict propagates to the client through
+    the publisher's retry loop. On a Client holding tens of thousands
+    of children the annotation becomes a measurable bottleneck for
+    sample registration, with the time per save growing roughly with
+    the number of children.
+
+    Sample listings in SENAITE never depend on the parent folder's
+    manual ordering — they sort catalog brains. Switching IClient to
+    UnorderedOrdering removes the hot-spot at no functional cost.
+    -->
+  <adapter
+      for="bika.lims.interfaces.IClient"
+      factory="plone.folder.unordered.UnorderedOrdering"
+      provides="plone.folder.interfaces.IOrdering"
+      />
+
+  <browser:page
+      for="*"
+      name="getcontainers"
+      class=".container.ajaxGetContainers"
+      permission="zope.Public"
+      layer="bika.lims.interfaces.IBikaLIMS"
+      />
+
+  <browser:page
+      for="*"
+      name="getpreservations"
+      class=".preservation.ajaxGetPreservations"
+      permission="zope.Public"
+      layer="bika.lims.interfaces.IBikaLIMS"
+      />
+
+</configure>

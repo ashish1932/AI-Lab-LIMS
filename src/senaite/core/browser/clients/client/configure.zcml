@@ -1,0 +1,12 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <!-- Package includes -->
+  <include package=".analysisprofiles"/>
+  <include package=".attachments"/>
+  <include package=".contacts"/>
+  <include package=".samplepoints"/>
+  <include package=".sampletemplates"/>
+
+</configure>

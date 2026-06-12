@@ -1,0 +1,35 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="senaite.core">
+
+  <browser:page
+      for="*"
+      name="ng"
+      class=".view.IDServerView"
+      permission="cmf.ManagePortal"
+      layer="senaite.core.interfaces.ISenaiteCore"
+      />
+
+  <browser:page
+      for="*"
+      name="ng_seed"
+      class=".view.IDServerView"
+      attribute="seed"
+      permission="cmf.ManagePortal"
+      layer="senaite.core.interfaces.ISenaiteCore"
+      />
+
+  <browser:resource
+      name="senaite.core.idserver.css"
+      file="static/css/idserver.css"
+      layer="senaite.core.interfaces.ISenaiteCore"
+      />
+
+  <browser:resource
+      name="senaite.core.idserver.js"
+      file="static/js/idserver.js"
+      layer="senaite.core.interfaces.ISenaiteCore"
+      />
+
+</configure>

@@ -1,0 +1,5 @@
+<!-- Sidebar container - React component renders here -->
+<div id="sidebar"
+     tal:condition="python:view.available()"
+     i18n:domain="senaite.core">
+</div>

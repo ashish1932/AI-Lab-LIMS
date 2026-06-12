@@ -1,0 +1,131 @@
+<div class="create-worksheet-modal modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" i18n:translate="">Create worksheet</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form name="create-worksheet-form"
+            class="form"
+            method="POST"
+            enctype="multipart/form-data"
+            tal:attributes="action string:${here/absolute_url}/create_worksheet_modal">
+
+        <!-- Available Analysts -->
+        <div class="form-group form-group-sm mb-3">
+          <label i18n:translate=""
+                 class="mr-2"
+                 for="analysis-categories-select">
+            Select analyst
+          </label>
+          <select id="analyst-select"
+                  class="selectpicker show-tick"
+                  name="analyst"
+                  tal:define="analysts view/get_analysts">
+            <tal:options repeat="analyst analysts">
+              <option tal:define="username python:analyst.get('username');
+                                  fullname python:analyst.get('fullname');"
+                      tal:attributes="value python:username;
+                                      data-subtext string:(${username})"
+                      tal:content="python:fullname"/>
+            </tal:options>
+          </select>
+          <small id="analyst-help"
+                 i18n:translate=""
+                 class="form-text text-muted small">
+            The analyst responsible for completing the analyses in this worksheet
+          </small>
+        </div>
+
+        <!-- Available Categories -->
+        <div class="form-group form-group-sm mb-3">
+          <label i18n:translate=""
+                 class="mr-2"
+                 for="analysis-categories-select">
+            Select analysis categories
+          </label>
+          <select multiple
+                  id="analysis-categories-select"
+                  name="categories"
+                  tal:define="categories view/get_analysis_categories">
+            <tal:options repeat="category categories">
+              <option tal:attributes="value python:category.get('uid')"
+                      tal:content="python:category.get('title')"/>
+            </tal:options>
+          </select>
+          <small id="analysis-categories-help"
+                 i18n:translate=""
+                 class="form-text text-muted">
+            Categories used to filter which analyses from the selected samples will be included in the worksheet
+          </small>
+        </div>
+
+        <!-- Available Worksheet Templates -->
+        <div class="form-group form-group-sm mb-3">
+          <label i18n:translate=""
+                 class="mr-2"
+                 for="worksheet-templates-select">
+            Select worksheet template
+          </label>
+          <select id="worksheet-template-select"
+                  class="selectpicker show-tick"
+                  name="template"
+                  tal:define="templates view/get_worksheet_templates">
+            <tal:options repeat="template templates">
+              <option tal:define="uid python:template.get('uid');
+                                  title python:template.get('title');"
+                      tal:attributes="value python:uid;"
+                      tal:content="python:title"/>
+            </tal:options>
+          </select>
+          <small id="analyst-help"
+                 i18n:translate=""
+                 class="form-text text-muted">
+            The worksheet includes all unassigned analyses specified in the chosen template
+            <br/>
+            <i class="fa-solid fa-circle-info"></i> Analyses from the selected categories will also be added.
+          </small>
+        </div>
+
+        <!-- Submit -->
+        <div class="form-group mt-2">
+          <input class="btn btn-sm btn-primary"
+                 type="submit"
+                 name="create_worksheet"
+                 i18n:attributes="value"
+                 value="Create Worksheet" />
+        </div>
+
+        <!-- hidden fields -->
+        <input type="hidden" name="submitted" value="1" />
+        <input tal:replace="structure context/@@authenticator/authenticator"/>
+        <input type="hidden" name="uids" value="" tal:attributes="value request/uids" />
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Initialize multi select -->
+  <script type="text/javascript">
+   $(function() {
+     // https://developer.snapappointments.com/bootstrap-select/options
+     $("select#analysis-categories-select").selectpicker({
+       actionsBox: true,
+       liveSearch: true,
+       noneSelectedText: _t("Select category"),
+       selectAllText: _t("Select all"),
+       deselectAllText: _t("Deselect all")
+     });
+     $("select#analyst-select").selectpicker({
+       liveSearch: true,
+       noneSelectedText: _t("Select analyst"),
+     });
+     $("select#worksheet-template-select").selectpicker({
+       liveSearch: true,
+       noneSelectedText: _t("Select template"),
+     });
+   });
+  </script>
+</div>

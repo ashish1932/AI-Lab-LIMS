@@ -1,0 +1,61 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      metal:use-macro="here/main_template/macros/master"
+      i18n:domain="senaite.core">
+
+  <metal:content-title fill-slot="content-title">
+    <h1 class="documentFirstHeading">
+      <span i18n:translate="">Welcome</span>,
+      <span tal:content="python:view.get_user_fullname()">User</span>
+    </h1>
+  </metal:content-title>
+
+  <metal:content-description fill-slot="content-description">
+    <div class="documentDescription text-muted">
+      <span tal:content="python:view.get_current_date()">Monday, 22 April 2026</span>
+      &mdash;
+      <span tal:content="python:view.get_current_time()">14:30</span>
+    </div>
+  </metal:content-description>
+
+  <metal:content-core fill-slot="content-core">
+
+    <link rel="stylesheet"
+          tal:attributes="href string:${portal_url}/++resource++senaite.core.dashboard.css" />
+
+    <!-- Configuration for dashboard.js -->
+    <div id="dashboard-config"
+         style="display:none"
+         tal:attributes="data-base-url string:${view/portal_url}/senaite-dashboard-data;
+                         data-periodicity view/periodicity;
+                         data-can-view-stats python:'true' if view.can_view_statistics() else 'false';
+                         data-portal-url view/portal_url;
+                         data-date-from python:plone_view.toLocalizedTime(view.date_from);
+                         data-date-to python:plone_view.toLocalizedTime(view.date_to)">
+    </div>
+
+    <!-- Status Cards + Quick Links (async) -->
+    <div id="dashboard-overview" class="mt-4">
+      <div class="text-muted">
+        <i class="fas fa-spinner fa-spin mr-2"></i>
+        <span i18n:translate="">Loading...</span>
+      </div>
+    </div>
+
+    <!-- Statistics Sections (async, permission-gated) -->
+    <tal:statistics condition="python:view.can_view_statistics()">
+      <div tal:repeat="section_id python:['analysisrequests', 'analyses', 'worksheets']">
+        <div tal:attributes="id string:dashboard-section-${section_id}"
+             class="dashboard-section">
+          <div class="text-muted py-3">
+            <i class="fas fa-spinner fa-spin mr-2"></i>
+            <span i18n:translate="">Loading...</span>
+          </div>
+        </div>
+      </div>
+    </tal:statistics>
+
+    <script tal:attributes="src string:${portal_url}/++resource++senaite.core.dashboard.js"></script>
+
+    <input tal:replace="structure context/@@authenticator/authenticator"/>
+  </metal:content-core>
+</html>
