@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: senaite-lims
+    env: docker
+    dockerFilePath: Dockerfile
+    plan: starter # A starter or higher plan is required on Render to attach a persistent disk
+    disk:
+      name: senaite-data
+      mountPath: /data
+      sizeGB: 10
+    envVars:
+      - key: SITE_ID
+        value: senaite
+      - key: ADMIN_USER
+        value: admin
+      - key: ADMIN_PASSWORD
+        value: admin
